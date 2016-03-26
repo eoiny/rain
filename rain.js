@@ -1,5 +1,6 @@
 function createViz() {
-  d3.csv("data/test.csv", function (error, data) {
+  d3.csv("data/test.csv",type, function (error, data) {
+    if (error) throw error;
     dataViz(data)
   });
 }
@@ -13,29 +14,79 @@ function createViz() {
     var x = d3.scale.ordinal()
       .rangeRoundBands([0, width], .1);
 
-    var x = d3.scale.ordinal()
-      .domain(["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"])
-      .rangeRoundBands([0, width], .1);
+    /*var y = d3.scale.linear()
+      .range([height, 0]);*/
 
     var y = d3.scale.linear()
-      .range([height, 0]);
+      .range([0,height]);
+
+
+
+
+
+
+
 
     var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("bottom");
+      .orient("top");
 
     var yAxis = d3.svg.axis()
       .scale(y)
       .orient("left")
-      .ticks(10, "%");
+      .ticks(10, "mm");
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#chart").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    y.domain([0, d3.max(data, function (d) {
-      return d.rain;
-    })]);
+    x.domain(data.map(function(d) { return d.month; }));
+    y.domain([0, d3.max(data, function(d) { return d.rain; })]);
+    //y.domain([0, d3.max(data, function(d) { return d3.max(d.rain; })]);
+
+    //y.domain([0, d3.max(data, function(d) {return d3.max(d, function(d) { return d.rain; });})]);
+
+
+      /*y.domain([0, d3.max(data, function(d) {
+        return d3.max(function(d) { return d.rain; });
+      })]);*/
+
+
+
+    svg.append("g")
+      .attr("class", "x axis")
+      //.attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+/*
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("mm");
+    */
+
+    svg.selectAll(".bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.month); })
+      .attr("y", 0)
+      .attr("width", x.rangeBand())
+      .attr("height", 0)
+      .transition()
+      .duration(900)
+      .ease("quad")
+      .attr("height", function(d) { return y(d.rain); });
+
   }
+
+function type(d) {
+  d.rain = +d.rain;
+  return d;
+}

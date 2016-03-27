@@ -64,30 +64,27 @@ function createViz() {
         .scale(x)
         .orient("bottom")
         .ticks(d3.time.months)
+        .tickSize(-1*(height), 0,0)
+        .tickFormat(d3.time.format("%b"))
     }
-
 
     // Draw the x Grid lines
     svg.append("g")
       .attr("class", "grid")
       .attr("transform", "translate(0," + height + ")")
+      .call(make_x_axis())
+      .selectAll(".tick text")
+      .style("text-anchor", "start")
+      .attr("x", 6)
+      .attr("y", -115)
       .style("opacity",0)
       .transition()
       .duration(2000)
-      .style("opacity",1)
-      .call(make_x_axis()
-        //.ticks(52)
-        .tickSize(-height, 0,0)
-        .tickFormat("")
-    );
-
+      .style("opacity",1);
 
     svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")");
-      //.call(xAxis);
-
-
 
     svg.selectAll(".bar")
       .data(data)
@@ -95,13 +92,12 @@ function createViz() {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.date); })
       .attr("y", 0)
-      //.attr("width", x.rangeBand())
       .attr("width", width/data.length)
       .attr("height", 0)
       .on("mouseover", mouseover)
       .on("mouseout", mouseout)
       .transition()
-      .duration(900)
+      .duration(1000)
       .ease("quad")
       .attr("height", function(d) { return y(d.rain); });
 
@@ -121,7 +117,7 @@ function createViz() {
 
     function mouseout(){
       tooltip.transition()
-        .duration(500)
+        .duration(400)
         .style("opacity", 1e-6);
     }
 

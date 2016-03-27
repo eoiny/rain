@@ -19,6 +19,14 @@
   stroke-width: 0.6px;
 }
 
+.tick text{
+  font: 10px sans-serif;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+
+
 .x.axis path {
   display: none;
 }

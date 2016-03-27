@@ -7,16 +7,41 @@
 }
 
 .axis {
-  font: 10px sans-serif;
+  font: 8px sans-serif;
+  stroke-width: 0.4px;
 }
 
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #ccc;
   shape-rendering: crispEdges;
+  stroke-width: 0.6px;
 }
 
 .x.axis path {
   display: none;
 }
+
+div.tooltip{
+  position:fixed;
+  text-align:center;
+  width:120px;
+  padding:10px;
+  font-size:10px;
+  font-family:Helvetica,sans-serif;
+  background:#ffffff;
+  pointer-events:none;
+  opacity:0;
+  border:1px solid #ccc;
+  z-index: 120;
+}
+
+.grid .tick {
+  stroke: lightgrey;
+  stroke-opacity: 0.5;
+  stroke-width: 0.5;
+  shape-rendering: crispEdges;
+}
+.grid path {
+  stroke-width: 0;
